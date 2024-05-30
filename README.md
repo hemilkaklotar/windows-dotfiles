@@ -14,18 +14,18 @@ To set up the dotfiles on your Windows system, follow these steps:
 1. Clone this repository to your local machine:
 
    ```sh
-   git clone https://github.com/hemilkaklotar/windows-dotfiles.git
+   git clone https://github.com/hemilkaklotar/windows-dotfiles.git ~/dotfiles
    ```
 
 2. Navigate to the cloned directory:
 
    ```sh
-   cd windows-dotfiles
+   cd ~/dotfiles
    ```
 
 3. Run the setup script to create symbolic links and configure your environment:
    ```sh
-   setup.bat
+   ./install.ps1
    ```
 
 ## Configuration
