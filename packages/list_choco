@@ -33,3 +33,10 @@ visualstudio2022community
 visualstudio-installer
 vscode
 vscode.install
+fzf
+lazygit
+ripgrep
+mingw
+zoxide
+gnuwin32-coreutils
+bitwarden
