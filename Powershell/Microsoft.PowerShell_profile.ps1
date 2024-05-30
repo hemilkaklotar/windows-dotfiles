@@ -6,16 +6,13 @@ Import-Module -Name Terminal-Icons
 
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
 
-function fzf-preview {
-    param (
-        [string]$directory = (Get-Location),
-        [string]$previewCommand = 'cat {}'
-    )
+function Invoke-NvimFzf {
+    $directory = Get-Location
+    $previewCommand = 'cat {}'
     Set-Location $directory
-    Get-ChildItem -Recurse -File | ForEach-Object { $_.FullName } | fzf --preview "$previewCommand"
+    Get-ChildItem -Recurse -File | ForEach-Object { $_.FullName } | fzf --preview "$previewCommand" | ForEach-Object { nvim $_ }
 }
-
-Set-Alias -Name vimf -Value vim fzf-preview
-
+# Nvim with fzf finder and file preview
+Set-Alias vimf Invoke-NvimFzf
 
 Import-Module -Name Microsoft.WinGet.CommandNotFound
