@@ -35,20 +35,20 @@ gaps:
 focus_borders:
   active:
     enabled: true
-    color: "#00ff00"
+    color: "#A3AEBE"
 
   inactive:
     enabled: false
     color: "#ff0000"
 
 bar:
-  height: "16px"
+  height: "18px"
   position: "top"
   opacity: 1.0
   background: "#20242cc4"
-  foreground: "#ffffff"
-  font_family: "Segoe UI"
-  font_size: "10px"
+  foreground: "#A1AEB1"
+  font_family: "CaskaydiaCove Nerd Font"
+  font_size: "14px"
   padding: "0px 8px"
   offset_x: "0"
   offset_y: "0"
@@ -62,7 +62,6 @@ bar:
   components_center:
     - type: "window title"
   components_right:
-    # - type: "system tray" #실행중인 프로그램 목록
     - type: "cpu"
       margin: "0 4px"
       padding: "0 8px"
@@ -76,9 +75,9 @@ bar:
       padding: "0 8px"
 
     - type: "battery"
-      draining: "{battery_level}% 🔋 remaining"
+      draining: "{battery_level}% 󰁹 remaining"
       power_saver: "{battery_level}% 🔁 (power saver)"
-      charging: "{battery_level}% ⚡ (charging)"
+      charging: "{battery_level}% 󰂄 (charging)"
       margin: "0 4px"
       padding: "0 8px"
 
@@ -130,13 +129,9 @@ window_rules:
     match_process_name: "Code"
     match_process_name: "Cursor"
   - command: "move to workspace 3"
-    match_process_name: "DeepL"
-    match_process_name: "KakaoTalk"
     match_process_name: "GitHubDesktop"
     match_process_name: "Discord"
     match_process_name: "SystemSettings"
-    match_process_name: "설정"
-    match_process_name: "RoundedTB"
   - command: "move to workspace 4"
     match_process_name: "Spotify"
     match_process_name: "Microsoft Edge"

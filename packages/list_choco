@@ -29,8 +29,7 @@ termius
 unifying
 vcredist140
 vcredist2015
-visualstudio2022community
-visualstudio-installer
+visualstudio2022buildtools
 vscode
 vscode.install
 fzf
@@ -41,3 +40,4 @@ zoxide
 gnuwin32-coreutils
 bitwarden
 starship
+gitkraken
