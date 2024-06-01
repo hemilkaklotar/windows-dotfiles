@@ -47,9 +47,9 @@ bar:
   opacity: 1.0
   background: "#20242cc4"
   foreground: "#A1AEB1"
-  font_family: "CaskaydiaCove Nerd Font"
+  font_family: "Roboto"
   font_size: "12px"
-  padding: "0px 8px"
+  padding: "0px 10px 0px 0px"
   offset_x: "0"
   offset_y: "0"
   border_radius: "0"
