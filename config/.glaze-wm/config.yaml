@@ -42,6 +42,7 @@ focus_borders:
     color: "#2a283e"
 
 bar:
+  enabled: false
   height: "18px"
   position: "top"
   opacity: 1.0
@@ -105,7 +106,7 @@ window_rules:
   # Task Manager requires admin privileges to manage and should be ignored unless running
   # the WM as admin.
   - command: "ignore"
-    match_process_name: "/Taskmgr|ScreenClippingHost/"
+    match_process_name: "/Taskmgr|ScreenClippingHost|Zebar/"
 
   # Launches system dialogs as floating by default (eg. File Explorer save/open dialog).
   - command: "set floating"
