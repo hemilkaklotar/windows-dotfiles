@@ -28,6 +28,16 @@ function Invoke-NvimFzf {
 # Create aliases for Neovim and the custom fzf finder function
 Set-Alias -Name vim -Value nvim
 Set-Alias vimf Invoke-NvimFzf
-
+function Activate-CondaEnv {
+    param (
+        [string]$envName
+    )
+    & conda activate $envName
+}
+function DeActivate-CondaEnv {
+    & conda deactivate
+}
+Set-Alias cact Activate-CondaEnv
+Set-Alias cdact DeActivate-CondaEnv
 # Import the Microsoft WinGet CommandNotFound module
 Import-Module -Name Microsoft.WinGet.CommandNotFound
