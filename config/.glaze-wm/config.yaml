@@ -46,9 +46,9 @@ bar:
   height: "18px"
   position: "top"
   opacity: 1
-  background: "#20242cc4"
+  background: "#20242C"
   foreground: "#A1AEB1"
-  font_family: "Roboto"
+  font_family: "Segoe UI"
   font_size: "12px"
   padding: "0px 10px 0px 0px"
   offset_x: "0"
