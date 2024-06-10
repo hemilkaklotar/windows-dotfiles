@@ -44,52 +44,66 @@ focus_borders:
 bar:
   enabled: true
   height: "18px"
-  position: "top"
+  position: "bottom"
   opacity: 1
   background: "#20242C"
   foreground: "#A1AEB1"
   font_family: "Segoe UI"
   font_size: "12px"
-  padding: "0px 10px 0px 0px"
+  padding: "0px"
   offset_x: "0"
   offset_y: "0"
   border_radius: "0"
   components_left:
     - type: "workspaces"
-      focused_workspace_background: "#ffffff33"
-      displayed_workspace_background: "#00000033"
+      focused_workspace_background: "#ffffff22"
+      focused_workspace_foreground: "#8EECCF"
+      displayed_workspace_background: "#000000"
       default_workspace_background: "transparent"
 
   components_center:
     - type: "window title"
+      foreground: "#8EECCF"
   components_right:
     - type: "cpu"
       margin: "0 4px"
       padding: "0 8px"
+      foreground: "#81a1c1"
+      label: "<attr ff='RobotoMono Nerd Font'> </attr> {percent_usage}%"
+
     - type: "memory"
+      foreground: "#81a1c1"
+      label: "<attr ff='RobotoMono Nerd Font'> </attr> {percent_usage}%"
+
+    - type: "battery"
+      draining: "{battery_level}%(remaining)"
+      power_saver: "{battery_level}%(power saver)"
+      charging: "{battery_level}%(charging)"
+      # Show an icon by using an icon font:
+      label_draining: "<attr ff='RobotoMono Nerd Font'>󰂂</attr> {battery_level}%"
+      # Multiple attributes can be changed at once:
+      label_charging: "<attr ff='RobotoMono Nerd Font'>󰂊</attr> {battery_level}%"
+      label_power_saver: "<attr ff='RobotoMono Nerd Font'>󱈏</attr> {battery_level}%"
+      foreground: "#8EECCF"
+      margin: "0 4px"
+      padding: "0 2px"
+
+    - type: "binding mode"
+      background: "#ffffff33"
+      # margin: "0 4px 0 0"
+      # padding: "0 8px"
+
+    - type: "clock"
+      foreground: "#23a8f2"
+      # Documentation on formatting date/time string:
+      # https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
+      time_formatting: "hh:mm tt  ddd MMM d"
 
     - type: "tiling direction"
       label_horizontal: "⮂"
       label_vertical: "⮁"
-      background: "#ffffff33"
-      margin: "0 4px"
-      padding: "0 8px"
-
-    - type: "battery"
-      draining: "{battery_level}% 󰁹 remaining"
-      power_saver: "{battery_level}% 🔁 (power saver)"
-      charging: "{battery_level}% 󰂄 (charging)"
-      margin: "0 4px"
-      padding: "0 8px"
-
-    - type: "binding mode"
-      background: "#ffffff33"
-      margin: "0 4px 0 0"
-      padding: "0 8px"
-    - type: "clock"
-      # Documentation on formatting date/time string:
-      # https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
-      time_formatting: "hh:mm tt  ddd MMM d"
+      foreground: "#8EECCF"
+      padding: "0 4px"
 
 workspaces:
   - name: "1"
