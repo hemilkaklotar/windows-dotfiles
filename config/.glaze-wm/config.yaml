@@ -25,24 +25,24 @@ general:
 
 gaps:
   # Gap between adjacent windows.
-  inner_gap: "0px"
+  inner_gap: "3px"
 
   # Gap between windows and the screen edge.
-  outer_gap: "0px"
+  outer_gap: "3px"
 
 # Highlight active/inactive windows with a colored border.
 # ** Exclusive to Windows 11 due to API limitations.
 focus_borders:
   active:
-    enabled: false
-    color: "#56526e"
+    enabled: true
+    color: "#8EECCF"
 
   inactive:
     enabled: false
     color: "#2a283e"
 
 bar:
-  enabled: true
+  enabled: false
   height: "18px"
   position: "bottom"
   opacity: 1
@@ -53,7 +53,7 @@ bar:
   padding: "0px"
   offset_x: "0"
   offset_y: "0"
-  border_radius: "0"
+  border_radius: "1px"
   components_left:
     - type: "workspaces"
       focused_workspace_background: "#ffffff22"
@@ -80,10 +80,10 @@ bar:
       power_saver: "{battery_level}%(power saver)"
       charging: "{battery_level}%(charging)"
       # Show an icon by using an icon font:
-      label_draining: "<attr ff='RobotoMono Nerd Font'>󰂂</attr> {battery_level}%"
+      label_draining: "[ <attr ff='RobotoMono Nerd Font'>󰂂</attr> {battery_level}% ]"
       # Multiple attributes can be changed at once:
-      label_charging: "<attr ff='RobotoMono Nerd Font'>󰂊</attr> {battery_level}%"
-      label_power_saver: "<attr ff='RobotoMono Nerd Font'>󱈏</attr> {battery_level}%"
+      label_charging: "[ <attr ff='RobotoMono Nerd Font'>󰂊 </attr> {battery_level}% ]"
+      label_power_saver: "[ <attr ff='RobotoMono Nerd Font'>󱈏</attr> {battery_level}% ]"
       foreground: "#8EECCF"
       margin: "0 4px"
       padding: "0 2px"
@@ -94,7 +94,6 @@ bar:
       # padding: "0 8px"
 
     - type: "clock"
-      foreground: "#23a8f2"
       # Documentation on formatting date/time string:
       # https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
       time_formatting: "hh:mm tt  ddd MMM d"
