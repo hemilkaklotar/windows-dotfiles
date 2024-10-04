@@ -1,10 +1,6 @@
 # Set the path for Starship configuration file
 $ENV:STARSHIP_CONFIG = "$HOME\dotfiles\config\starship\starship.toml"
 
-# Initialize oh-my-posh (commented out, but included for reference)
-# oh-my-posh init pwsh | Invoke-Expression
-# oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\robbyrussell.omp.json" | Invoke-Expression
-
 # Import the Terminal-Icons module for file icons in the terminal
 Import-Module -Name Terminal-Icons
 
@@ -27,6 +23,7 @@ function Invoke-NvimFzf {
 
 # Create aliases for Neovim and the custom fzf finder function
 Set-Alias -Name vim -Value nvim
+Set-Alias -Name charm -Value pycharm1
 Set-Alias vimf Invoke-NvimFzf
 function Activate-CondaEnv {
     param (

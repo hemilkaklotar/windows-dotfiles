@@ -25,16 +25,14 @@ general:
 
 gaps:
   # Gap between adjacent windows.
-  inner_gap: "3px"
-
-  # Gap between windows and the screen edge.
-  outer_gap: "3px"
+  inner_gap: '2px'
+  outer_gap: '2px'
 
 # Highlight active/inactive windows with a colored border.
 # ** Exclusive to Windows 11 due to API limitations.
 focus_borders:
   active:
-    enabled: true
+    enabled: false
     color: "#8EECCF"
 
   inactive:
@@ -42,32 +40,40 @@ focus_borders:
     color: "#2a283e"
 
 bar:
-  enabled: false
-  height: "18px"
-  position: "bottom"
+  enabled: true
+  height: "24px"
+  position: "top"
   opacity: 1
   background: "#20242C"
   foreground: "#A1AEB1"
-  font_family: "Segoe UI"
-  font_size: "12px"
+  font_family: "0xProto Nerd Font"
+  font_size: "14px"
   padding: "0px"
   offset_x: "0"
   offset_y: "0"
   border_radius: "1px"
+
+  component_separator:
+    label: "  "
+    foreground: "#8EECCF"
+
   components_left:
+    - type: "text"
+      text: "  "
+      foreground: "#8EECCF"
+    - type: "window title"
+      foreground: "#8EECCF"
+
+  components_center:
     - type: "workspaces"
       focused_workspace_background: "#ffffff22"
       focused_workspace_foreground: "#8EECCF"
       displayed_workspace_background: "#000000"
       default_workspace_background: "transparent"
+      padding: "3px"
 
-  components_center:
-    - type: "window title"
-      foreground: "#8EECCF"
   components_right:
     - type: "cpu"
-      margin: "0 4px"
-      padding: "0 8px"
       foreground: "#81a1c1"
       label: "<attr ff='RobotoMono Nerd Font'> </attr> {percent_usage}%"
 
@@ -79,30 +85,17 @@ bar:
       draining: "{battery_level}%(remaining)"
       power_saver: "{battery_level}%(power saver)"
       charging: "{battery_level}%(charging)"
-      # Show an icon by using an icon font:
-      label_draining: "[ <attr ff='RobotoMono Nerd Font'>󰂂</attr> {battery_level}% ]"
-      # Multiple attributes can be changed at once:
-      label_charging: "[ <attr ff='RobotoMono Nerd Font'>󰂊 </attr> {battery_level}% ]"
-      label_power_saver: "[ <attr ff='RobotoMono Nerd Font'>󱈏</attr> {battery_level}% ]"
+      label_draining: "<attr ff='RobotoMono Nerd Font'>󰂂</attr> {battery_level}%"
+      label_charging: "<attr ff='RobotoMono Nerd Font'>󰂊 </attr> {battery_level}%"
+      label_power_saver: "<attr ff='RobotoMono Nerd Font'>󱈏</attr> {battery_level}%"
       foreground: "#8EECCF"
-      margin: "0 4px"
-      padding: "0 2px"
-
-    - type: "binding mode"
-      background: "#ffffff33"
-      # margin: "0 4px 0 0"
-      # padding: "0 8px"
-
-    - type: "clock"
-      # Documentation on formatting date/time string:
-      # https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
-      time_formatting: "hh:mm tt  ddd MMM d"
 
     - type: "tiling direction"
       label_horizontal: "⮂"
       label_vertical: "⮁"
-      foreground: "#8EECCF"
-      padding: "0 4px"
+
+    - type: "clock"
+      time_formatting: "hh:mm tt  ddd MMM d "
 
 workspaces:
   - name: "1"
@@ -119,6 +112,14 @@ window_rules:
   # Task Manager requires admin privileges to manage and should be ignored unless running
   # the WM as admin.
   - command: "ignore"
+    match:
+      # Ignores any Zebar windows.
+      - window_process: { equals: "zebar" }
+
+      # Ignores picture-in-picture windows for browsers.
+      # Note that *both* the title and class must match for the rule to run.
+      - window_title: { regex: "[Pp]icture.in.[Pp]icture" }
+        window_class: { regex: "Chrome_WidgetWin_1|MozillaDialogClass" }
     match_process_name: "/Taskmgr|ScreenClippingHost|Zebar/"
 
   # Launches system dialogs as floating by default (eg. File Explorer save/open dialog).
@@ -237,7 +238,8 @@ keybindings:
   # Launch CMD terminal (alternatively `exec wt` or `exec %ProgramFiles%/Git/git-bash.exe`
   # to start Windows Terminal and Git Bash respectively.
   # - command: "exec %ProgramFiles%/Alacritty/alacritty.exe"
-  - command: "exec wt"
+  # - command: "exec wt"
+  - command: "exec 'C:/Program Files/WezTerm/wezterm-gui.exe"
     binding: "Alt+Enter"
 
   # Focus the workspace that last had focus.
@@ -299,3 +301,330 @@ keybindings:
     binding: "Alt+Shift+8"
   - commands: ["move to workspace 9", "focus workspace 9"]
     bindings: ["Alt+Shift+9"]
+
+global:
+  enable_devtools: true
+
+window/bar:
+  providers: ["self"]
+  width: "{{ self.args.MONITOR_WIDTH }}"
+  height: "60" #This one is a bit funky, if you are using scaling, adjust accordingly
+  position_x: "{{ self.args.MONITOR_X }}"
+  position_y: "{{ self.args.MONITOR_Y }}"
+  z_order: "always_on_bottom"
+  show_in_taskbar: false
+  resizable: false
+  global_styles: |
+    @import "https://www.nerdfonts.com/assets/css/webfont.css";
+    @import "https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css";
+
+    :root {
+      --rp-base: #191724;
+      --rp-base-alpha-bg: #191724dd;
+      --rp-surface: #1f1d2e;
+      --rp-overlay: #26233a;
+      --rp-muted: #6e6a86;
+      --rp-subtle: #908caa;
+      --rp-text: #e0def4;
+      --rp-love: #eb6f92;
+      --rp-gold: #f6c177;
+      --rp-rose: #ebbcba;
+      --rp-pine: #31748f;
+      --rp-foam: #9ccfd8;
+      --rp-iris: #c4a7e7;
+      --rp-highlight-low: #21202e;
+      --rp-highlight-med: #403d52;
+      --rp-highlight-high: #524f67;
+
+      --rp-moon-base: #232136;
+      --rp-moon-base-alpha-bg: #232136dd;
+      --rp-moon-surface: #2a273f;
+      --rp-moon-overlay: #393552;
+      --rp-moon-muted: #6e6a86;
+      --rp-moon-subtle: #908caa;
+      --rp-moon-text: #e0def4;
+      --rp-moon-love: #eb6f92;
+      --rp-moon-gold: #f6c177;
+      --rp-moon-rose: #ea9a97;
+      --rp-moon-pine: #3e8fb0;
+      --rp-moon-foam: #9ccfd8;
+      --rp-moon-iris: #c4a7e7;
+      --rp-moon-highlight-low: #2a283e;
+      --rp-moon-highlight-med: #44415a;
+      --rp-moon-highlight-high: #56526e;
+
+      --rp-dawn-base: #faf4ed;
+      --rp-dawn-base-alpha-bg: #faf4eddd
+      --rp-dawn-surface: #fffaf3;
+      --rp-dawn-overlay: #f2e9e1;
+      --rp-dawn-muted: #9893a5;
+      --rp-dawn-subtle: #797593;
+      --rp-dawn-text: #575279;
+      --rp-dawn-love: #b4637a;
+      --rp-dawn-gold: #ea9d34;
+      --rp-dawn-rose: #d7827e;
+      --rp-dawn-pine: #286983;
+      --rp-dawn-foam: #56949f;
+      --rp-dawn-iris: #907aa9;
+      --rp-dawn-highlight-low: #f4ede8;
+      --rp-dawn-highlight-med: #dfdad9;
+      --rp-dawn-highlight-high: #cecacd;
+
+      --text: var(--rp-text);
+      --bg: var(--rp-base-alpha-bg);
+      --border: var(--rp-base);
+      --icon: var(--rp-love);
+      --memory: var(--rp-iris);
+      --cpu: var(--rp-rose);
+      --cpu-high-usage: var(--rp-love);
+      --battery-good: var(--rp-foam);
+      --battery-mid: var(--rp-gold);
+      --battery-low: var(--rp-love);
+      --ws-1: var(--rp-love);
+      --ws-2: var(--rp-gold);
+      --ws-3: var(--rp-rose);
+      --ws-4: var(--rp-pine);
+      --ws-5: var(--rp-foam);
+      --ws-6: var(--rp-iris);
+      --weather: var(--rp-gold);
+    }
+
+    @keyframes flash {
+        from { opacity: 1.0; }
+        50% { opacity: 0.5; }
+        to { opacity: 1.0; }
+    }
+
+  styles: |
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    height: 40px;
+    margin: 10px 20px;
+    color: var(--text);
+    font-family: "SF Mono", ui-monospace, monospace;
+    font-size: 16px;
+    font-weight: 600;
+
+  group/left:
+    styles: |
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      height: 40px; 
+      width: fit-content;
+
+      .template {
+        margin: 4px;
+        display: flex;
+        align-items: center;
+
+        div {
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      #memory, #cpu, #battery {
+        background: color-mix(in srgb, currentColor 10%, transparent);
+        border-radius: 9999px;
+        padding: 6px;
+        i {
+          font-size: 20px;
+          margin-right: 7px;
+        }
+      }
+
+    template/rose-pine:
+      styles: |
+        color: var(--icon);
+        background: color-mix(in srgb, currentColor 10%, transparent);
+        padding: 6px;
+        border-radius: 9999px
+      template: |
+        <i class="nf nf-md-flower_tulip"></i>
+
+    template/memory:
+      providers: ["memory"]
+      styles: |
+        color: var(--memory);
+      template: |
+        <i class="ti ti-rocket"></i>
+        {{ (memory.usedMemory / 1000000000).toFixed(2) }} GiB
+
+    template/cpu:
+      providers: ["cpu"]
+      styles: |
+        color: var(--cpu);
+
+        .high-usage {
+          color: var(--cpu-high-usage);
+          animation: flash 0.5s infinite;
+        }
+      template: |
+        <div class={{cpu.usage > 85 ? "high-usage" : ""}}>
+          <i class="ti ti-cpu"></i>
+          <span>{{ Math.round(cpu.usage) }}%</span>
+        </div>
+
+    template/battery:
+      providers: ["battery"]
+      styles: |
+        .critical {
+          color: var(--battery-low);
+          animation: flash 1s infinite;
+        }
+
+        .low {
+          color: var(--battery-low)
+        }
+
+        .mid {
+          color: var(--battery-mid)
+        }
+
+        .good {
+          color: var(--battery-good);
+        }
+      template: |
+        <div class="
+            @switch (true) {
+              @case (battery.chargePercent > 75) { good }
+              @case (battery.chargePercent > 50) { mid }
+              @case (battery.chargePercent > 25) { low }
+              @default { critical }
+            }
+          ">
+            <i class="ti ti-bolt"></i>
+            {{ Math.round(battery.chargePercent) }}%
+        </div>
+
+  group/center:
+    styles: |
+      justify-self: center;
+
+    template/glazewm:
+      styles: |
+        height: 40px;
+        display: flex;
+        align-items: center;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 9999px;
+        font-weight: 1000;
+
+        .workspace {
+          background:transparent;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px;
+        }
+
+        i {
+          padding: 8px;
+          background: color-mix(in srgb, currentColor 10%, transparent);
+          border-radius: 9999px;
+        }      
+
+        button:nth-child(6n+1) i {
+          color: var(--ws-1);
+        }
+
+        button:nth-child(6n+2) i {
+          color: var(--ws-2);
+        }
+
+        button:nth-child(6n+3) i {
+          color: var(--ws-3);
+        }
+
+        button:nth-child(6n+4) i {
+          color: var(--ws-4);
+        }
+
+        button:nth-child(6n+5) i {
+          color: var(--ws-5);
+        }
+
+        button:nth-child(6n+6) i {
+          color: var(--ws-6);
+        }
+
+      providers: ["glazewm"]
+      events:
+        - type: "click"
+          fn_path: "script.js#focusWorkspace"
+          selector: ".workspace"
+      template: |
+        @for (workspace of glazewm.currentWorkspaces) {
+          <button class="workspace" id="{{ workspace.name }}">
+            <i class="nf {{ workspace.hasFocus? 'nf-cod-circle_filled' : 'nf-cod-circle' }}"></i>
+          </button>
+        }
+
+  group/right:
+    styles: |
+      justify-self: end;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+
+      .template {
+        margin: 4px;
+        display: flex;
+        align-items: center;
+      }
+
+      #weather {
+        background: color-mix(in srgb, currentColor 10%, transparent);
+        border-radius: 9999px;
+        padding: 6px;
+        i {
+          margin-right: 7px;
+        }
+      }
+
+    template/weather:
+      providers: ["weather"]
+      styles: |
+        margin: 10px;
+        i {
+          font-size: 20px;
+        }
+        color: var(--weather);
+      template: |
+        @switch (weather.status) {
+          @case ('clear_day') {<i class="nf nf-weather-day_sunny"></i>}
+          @case ('clear_night') {<i class="nf nf-weather-night_clear"></i>}
+          @case ('cloudy_day') {<i class="nf nf-weather-day_cloudy"></i>}
+          @case ('cloudy_night') {<i class="nf nf-weather-night_alt_cloudy"></i>}
+          @case ('light_rain_day') {<i class="nf nf-weather-day_sprinkle"></i>}
+          @case ('light_rain_night') {<i class="nf nf-weather-night_alt_sprinkle"></i>}
+          @case ('heavy_rain_day') {<i class="nf nf-weather-day_rain"></i>}
+          @case ('heavy_rain_night') {<i class="nf nf-weather-night_alt_rain"></i>}
+          @case ('snow_day') {<i class="nf nf-weather-day_snow"></i>}
+          @case ('snow_night') {<i class="nf nf-weather-night_alt_snow"></i>}
+          @case ('thunder_day') {<i class="nf nf-weather-day_lightning"></i>}
+          @case ('thunder_night') {<i class="nf nf-weather-night_alt_lightning"></i>}
+        }
+        {{ weather.celsiusTemp }}°
+
+    template/separator:
+      styles: |
+      template: |
+        <i class="nf nf-oct-dot_fill"></>
+
+    template/clock:
+      providers: ["date"]
+      styles: |
+        padding-right: 6px;
+      template: |
+        {{ date.toFormat(date.now, 't') }}
