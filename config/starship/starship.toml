@@ -1,7 +1,6 @@
-add_newline = false
+add_newline = true
 # A minimal left prompt
-# format = """$directory$all$character"""
-format = """$directory$all$character"""
+format = """$directory$all\n[  ](fg:#ff0000)$character"""
 palette = "catppuccin_mocha"
 # move the rest of the prompt to the right
 # right_format = """$all"""
@@ -9,10 +8,10 @@ follow_symlinks = true
 command_timeout = 1000
 
 [directory]
-home_symbol	= ' ~/'
+home_symbol	= '~/'
 truncation_length = 8
-truncation_symbol = ' ~'
-format = '[░▒▓](#769ff0)[  ](bg:#769ff0 fg:#090c0c)[ $path ]($style)[$read_only]($read_only_style)'
+truncation_symbol = '.../'
+format = '[ $path ]($style)[$read_only]($read_only_style)'
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -20,6 +19,12 @@ format = '[░▒▓](#769ff0)[  ](bg:#769ff0 fg:#090c0c)[ $path ]($style)[$r
 "Music" = "󰝚 "
 "Pictures" = " "
 "Developer" = "󰲋 "
+
+[time]
+disabled = false
+time_format = "%R %p"
+style = "bg:base"
+format = '[[ $time ](fg:rosewater bg:base)]($style)'
 
 [git_branch]
 format =  '[$symbol$branch(:$remote_branch)]($style)'
@@ -88,23 +93,17 @@ symbol = ""
 style = "bg:base"
 format = '[[ $symbol( $environment) ](fg:green bg:base)]($style)'
 
-[time]
-disabled = false
-time_format = "%R %p"
-style = "bg:base"
-format = '[[  $time ](fg:rosewater bg:base)]($style)'
-
 [line_break]
-disabled = false
+disabled = true
 
 [character]
 disabled = false
-success_symbol = '[](bold fg:blue)'
-error_symbol = '[](bold fg:red)'
-vimcmd_symbol = '[](bold fg:green)'
+success_symbol = '[#](bold fg:blue)'
+error_symbol = '[#](bold fg:red)'
+vimcmd_symbol = '[#](bold fg:green)'
 vimcmd_replace_one_symbol = '[](bold fg:mauve)'
-vimcmd_replace_symbol = '[](bold fg:mauve)'
-vimcmd_visual_symbol = '[](bold fg:yellow)'
+vimcmd_replace_symbol = '[#](bold fg:mauve)'
+vimcmd_visual_symbol = '[#](bold fg:yellow)'
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
@@ -131,7 +130,6 @@ surface2 = "#585b70"
 surface1 = "#45475a"
 surface0 = "#313244"
 base = "#00000000"
-# base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
 
