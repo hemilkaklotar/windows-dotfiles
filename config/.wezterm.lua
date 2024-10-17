@@ -5,7 +5,7 @@ local config = {}
 
 config.audible_bell = "Disabled"
 config.color_scheme = "Navy and Ivory (terminal.sexy)"
-config.font_size = 16
+config.font_size = 14
 config.front_end = "OpenGL"
 config.freetype_load_target = "Light"
 config.freetype_load_flags = "NO_HINTING"
