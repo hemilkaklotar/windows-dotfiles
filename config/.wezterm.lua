@@ -1,102 +1,156 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
-local config = {}
+-- Function to get the current hour for dynamic settings
+local function get_current_hour()
+  return os.date("*t").hour
+end
 
-config.audible_bell = "Disabled"
-config.color_scheme = "Navy and Ivory (terminal.sexy)"
-config.font_size = 14
-config.front_end = "OpenGL"
-config.freetype_load_target = "Light"
-config.freetype_load_flags = "NO_HINTING"
-config.freetype_render_target = "HorizontalLcd"
-config.detect_password_input = true
-config.window_decorations = "RESIZE"
-config.window_close_confirmation = "NeverPrompt"
-config.warn_about_missing_glyphs = false
+-- Dynamic opacity based on the time of day
+local function get_dynamic_opacity()
+  local hour = get_current_hour()
+  -- Set opacity to 0.25 during the night (8 PM to 6 AM), and 0.8 during the day
+  if hour >= 20 or hour < 6 then
+    return 0.25
+  else
+    return 0.8
+  end
+end
+
+-- Color variables
+local opacity = get_dynamic_opacity()
+local transparent_bg = "rgba(35, 38, 52, " .. opacity .. ")"
+local bg_color = "#1e1e2e"
+local active_tab_color = "#cba6f7"
+local inactive_tab_color = "#1e1e2e"
+local status_bg_color = "#313244"
+local icon_color = "#f38a99"
+local right_corner_color = "#1e1e2e"
+
+local config = wezterm.config_builder()
+
+-- Font settings
 config.font = wezterm.font_with_fallback({
-	"RobotoMono Nerd Font Mono",
-	"0xProto Nerd Font Mono",
-	"JetBrainsMono Nerd Font",
-	"Noto Color Emoji",
+  "RobotoMono Nerd Font",
+  {
+    family = "JetBrainsMono Nerd Font",
+    weight = "Regular",
+  },
+  "Segoe UI Emoji",
 })
 
-wezterm.on("toggle-background", function(window, pane)
-	local overrides = window:get_config_overrides() or {}
-	if wezterm.GLOBAL.background_empty == true then
-		overrides.background = {
-			{
-				source = {
-					File = wezterm.GLOBAL.background,
-				},
-				repeat_x = "NoRepeat",
-				vertical_align = "Bottom",
-				hsb = { brightness = 0.05, hue = 1, saturation = 1 },
-				opacity = 1,
-			},
-		}
-		wezterm.GLOBAL.background_empty = false
-	else
-		wezterm.GLOBAL.background_empty = true
-		overrides.background = {}
-	end
-	window:set_config_overrides(overrides)
+config.font_size = 14
+
+-- Window settings
+config.initial_rows = 30
+config.initial_cols = 100
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.window_background_opacity = opacity
+config.window_close_confirmation = "NeverPrompt"
+config.win32_system_backdrop = "Tabbed"
+config.max_fps = 144
+config.animation_fps = 60
+config.cursor_blink_rate = 250
+config.front_end = "OpenGL"
+
+-- Colors
+config.force_reverse_video_cursor = true
+config.color_scheme = "Catppuccin Mocha"
+
+-- Shell
+config.default_prog = { "pwsh", "-NoLogo" }
+
+-- Tabs
+config.enable_tab_bar = true
+config.hide_tab_bar_if_only_one_tab = false
+config.show_tab_index_in_tab_bar = false
+config.use_fancy_tab_bar = false
+
+wezterm.on("update-right-status", function(window, pane)
+  local active_workspace = window:active_workspace()
+  local time = wezterm.strftime("%I:%M %p")
+  local icon = "󱑍"
+  local workspace_icon = "󱑽"
+  local right_corner = ""
+  local left_corner = ""
+  window:set_right_status(wezterm.format({
+    { Foreground = { Color = bg_color } },
+    { Text = left_corner },
+    { Background = { Color = bg_color } },
+    { Foreground = { Color = icon_color } },
+    { Text = icon },
+    { Foreground = { Color = active_tab_color } },
+    { Text = " " .. time },
+    { Background = { Color = transparent_bg } },
+    { Foreground = { Color = bg_color } },
+    { Text = right_corner },
+    { Text = " " },
+    { Foreground = { Color = bg_color } },
+    { Text = left_corner },
+    { Background = { Color = bg_color } },
+    { Foreground = { Color = icon_color } },
+    { Text = workspace_icon },
+    { Foreground = { Color = active_tab_color } },
+    { Text = " " .. active_workspace },
+    { Background = { Color = transparent_bg } },
+    { Foreground = { Color = bg_color } },
+    { Text = right_corner },
+    { Text = " " },
+  }))
 end)
 
-wezterm.on("toggle-opacity", function(window, pane)
-	local overrides = window:get_config_overrides() or {}
-	if not overrides.window_background_opacity then
-		overrides.window_background_opacity = 1
-	else
-		overrides.window_background_opacity = nil
-	end
-	window:set_config_overrides(overrides)
+-- Function to format tab title
+local function format_tab_title(tab, max_width)
+  local index = tostring(tab.tab_index + 1)
+  local title = tab.tab_title
+  if title and #title > 0 then
+    title = wezterm.truncate_right(title, max_width - 2)
+  else
+    title = wezterm.truncate_right(tab.active_pane.title, max_width - 2)
+  end
+
+  local before_tag = ""
+  local after_tag = ""
+  local tab_title = " " .. index .. ": " .. title
+
+  if tab.is_active then
+    return {
+      { Background = { Color = transparent_bg } },
+      { Foreground = { Color = active_tab_color } },
+      { Text = before_tag },
+      { Background = { Color = active_tab_color } },
+      { Foreground = { Color = bg_color } },
+      { Text = tab_title },
+      { Background = { Color = transparent_bg } },
+      { Foreground = { Color = active_tab_color } },
+      { Text = after_tag },
+      { Text = " " },
+    }
+  else
+    return {
+      { Background = { Color = transparent_bg } },
+      { Foreground = { Color = bg_color } },
+      { Text = before_tag },
+      { Background = { Color = bg_color } },
+      { Foreground = { Color = active_tab_color } },
+      { Text = tab_title },
+      { Background = { Color = transparent_bg } },
+      { Foreground = { Color = bg_color } },
+      { Text = after_tag },
+      { Text = " " },
+    }
+  end
+end
+
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+  return format_tab_title(tab, max_width)
 end)
 
-config.window_background_opacity = 0.9
-
-local function file_exists(name)
-	local f = io.open(name, "r")
-	if f ~= nil then
-		io.close(f)
-		return true
-	else
-		return false
-	end
-end
-
-local wsl_domains = wezterm.default_wsl_domains()
-for idx, dom in ipairs(wsl_domains) do
-	if dom.name == "WSL:Ubuntu-24.04" then
-		dom.default_prog = { "zsh" }
-	end
-end
-config.wsl_domains = wsl_domains
-
-local default_prog = nil
-if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-	local useWslUbuntu = false
-	if useWslUbuntu then
-		config.default_domain = "WSL:Ubuntu-24.04"
-	end
-	local pwsh7_path = "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
-	if file_exists(pwsh7_path) then
-		default_prog = { pwsh7_path, "-NoLogo" }
-	else
-		default_prog = { "powershell.exe", "-NoLogo" }
-	end
-else
-	default_prog = { "/bin/zsh", "-l" }
-end
-
-config.default_prog = default_prog
-
-config.default_cursor_style = "BlinkingBar"
-config.cursor_blink_rate = 600
-config.cursor_blink_ease_out = "Linear"
+config.colors = {
+  tab_bar = { background = transparent_bg },
+}
 
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
-config.disable_default_key_bindings = true
 config.keys = {
 	{ key = "a", mods = "CTRL|LEADER", action = wezterm.action({ SendString = "\x01" }) },
 	{ key = "-", mods = "LEADER", action = wezterm.action({ SplitVertical = { domain = "CurrentPaneDomain" } }) },
@@ -122,8 +176,6 @@ config.keys = {
 	{ key = "9", mods = "LEADER", action = wezterm.action({ ActivateTab = 8 }) },
 	{ key = "&", mods = "LEADER|SHIFT", action = wezterm.action({ CloseCurrentTab = { confirm = true } }) },
 	{ key = "x", mods = "LEADER", action = wezterm.action({ CloseCurrentPane = { confirm = true } }) },
-	{ key = "o", mods = "CTRL|META", action = wezterm.action.EmitEvent("toggle-opacity") },
-	{ key = "m", mods = "CTRL|META", action = wezterm.action.EmitEvent("toggle-background") },
 	{ key = "n", mods = "SHIFT|CTRL", action = "ToggleFullScreen" },
 	{ key = "v", mods = "SHIFT|CTRL", action = wezterm.action.PasteFrom("Clipboard") },
 	{ key = "c", mods = "SHIFT|CTRL", action = wezterm.action.CopyTo("Clipboard") },
@@ -164,27 +216,17 @@ config.keys = {
 		}),
 	},
 }
-
-config.launch_menu = {
-	{ label = "bash", args = { "bash", "-l" } },
-	{ label = "zsh", args = { "zsh", "-l" } },
-}
-
-local bar = wezterm.plugin.require("https://github.com/adriankarlen/bar.wezterm")
-bar.apply_to_config(config)
-
-bar.apply_to_config(config, {
-	modules = {
-		spotify = {
-			enabled = true,
-		},
+config.mouse_bindings = {
+	-- CMD-click will open the link under the mouse cursor
+	{
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "ALT",
+		action = wezterm.action.DisableDefaultAssignment,
 	},
-})
-
-local tabbar = config.colors.tab_bar
-
-tabbar.background = "transparent"
-tabbar.active_tab.bg_color = "#26233a"
-tabbar.inactive_tab.bg_color = "transparent"
-tabbar.active_tab.fg_color = "#fff"
+	{
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "CTRL",
+		action = wezterm.action.OpenLinkAtMouseCursor,
+	},
+}
 return config

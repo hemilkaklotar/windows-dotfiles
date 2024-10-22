@@ -20,9 +20,16 @@ format = '[ $path ]($style)[$read_only]($read_only_style)'
 "Pictures" = " "
 "Developer" = "󰲋 "
 
+[battery]
+disabled = false
+format = "[$symbol $percentage]($style) "
+full_symbol = ""
+charging_symbol = ""
+discharging_symbol = ""
+
 [time]
 disabled = false
-time_format = "%R %p"
+time_format = "%I:%M %p"
 style = "bg:base"
 format = '[[ $time ](fg:rosewater bg:base)]($style)'
 
