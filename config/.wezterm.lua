@@ -1,154 +1,168 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
+local config = wezterm.config_builder()
 
--- Function to get the current hour for dynamic settings
-local function get_current_hour()
-  return os.date("*t").hour
-end
-
--- Dynamic opacity based on the time of day
 local function get_dynamic_opacity()
-  local hour = get_current_hour()
-  -- Set opacity to 0.25 during the night (8 PM to 6 AM), and 0.8 during the day
-  if hour >= 20 or hour < 6 then
-    return 0.25
-  else
-    return 0.8
-  end
+	local hour =os.date("*t").hour
+	if hour >= 20 or hour < 6 then
+		return 0.25
+	else
+		return 0.8
+	end
 end
 
 -- Color variables
 local opacity = get_dynamic_opacity()
-local transparent_bg = "rgba(35, 38, 52, " .. opacity .. ")"
+
+-- INFO: Color configuration::
+
+-- 1: Colors
+config.force_reverse_video_cursor = true
+config.color_scheme = "Catppuccin Mocha"
+local transparent_bg = "#181825"
 local bg_color = "#1e1e2e"
 local active_tab_color = "#cba6f7"
-local inactive_tab_color = "#1e1e2e"
-local status_bg_color = "#313244"
+local active_tab_background = "#2d2c3c"
+local inactive_tab_color = "#372c43"
+local inactive_text_color = "#737184"
+local status_bg_color = "#1e1e2e"
 local icon_color = "#f38a99"
-local right_corner_color = "#1e1e2e"
+config.colors = {
+	tab_bar = { background = transparent_bg },
+}
 
-local config = wezterm.config_builder()
+-- INFO: tab configuration
 
--- Font settings
+config.enable_tab_bar = true
+config.hide_tab_bar_if_only_one_tab = false
+config.show_tab_index_in_tab_bar = false
+config.use_fancy_tab_bar = false
+local right_corner = ""
+local left_corner = ""
+local max_length_title = 10
+
+-- INFO: Font settings
+
 config.font = wezterm.font_with_fallback({
-  "RobotoMono Nerd Font",
-  {
-    family = "JetBrainsMono Nerd Font",
-    weight = "Regular",
-  },
-  "Segoe UI Emoji",
+	{
+		family = "VictorMono Nerd Font",
+		weight = "Regular",
+	},
+	{
+		family = "JetBrainsMono Nerd Font",
+		weight = "Regular",
+	},
+	"Segoe UI Emoji",
 })
 
 config.font_size = 14
 
--- Window settings
+-- INFO: Window settings
+
 config.initial_rows = 30
 config.initial_cols = 100
-config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.window_decorations = "RESIZE"
 config.window_background_opacity = opacity
 config.window_close_confirmation = "NeverPrompt"
 config.win32_system_backdrop = "Tabbed"
 config.max_fps = 144
 config.animation_fps = 60
 config.cursor_blink_rate = 250
-config.front_end = "OpenGL"
-
--- Colors
-config.force_reverse_video_cursor = true
-config.color_scheme = "Catppuccin Mocha"
+-- config.front_end = "OpenGL"
 
 -- Shell
 config.default_prog = { "pwsh", "-NoLogo" }
 
--- Tabs
-config.enable_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = false
-config.show_tab_index_in_tab_bar = false
-config.use_fancy_tab_bar = false
 
-wezterm.on("update-right-status", function(window, pane)
-  local active_workspace = window:active_workspace()
-  local time = wezterm.strftime("%I:%M %p")
-  local icon = "󱑍"
-  local workspace_icon = "󱑽"
-  local right_corner = ""
-  local left_corner = ""
-  window:set_right_status(wezterm.format({
-    { Foreground = { Color = bg_color } },
-    { Text = left_corner },
-    { Background = { Color = bg_color } },
-    { Foreground = { Color = icon_color } },
-    { Text = icon },
-    { Foreground = { Color = active_tab_color } },
-    { Text = " " .. time },
-    { Background = { Color = transparent_bg } },
-    { Foreground = { Color = bg_color } },
-    { Text = right_corner },
-    { Text = " " },
-    { Foreground = { Color = bg_color } },
-    { Text = left_corner },
-    { Background = { Color = bg_color } },
-    { Foreground = { Color = icon_color } },
-    { Text = workspace_icon },
-    { Foreground = { Color = active_tab_color } },
-    { Text = " " .. active_workspace },
-    { Background = { Color = transparent_bg } },
-    { Foreground = { Color = bg_color } },
-    { Text = right_corner },
-    { Text = " " },
-  }))
+local function workspace_time_panel(active_workspace)
+	local time = wezterm.strftime("%I:%M %p")
+	local time_icon = "󱑍"
+	local workspace_icon = "󱑽"
+	return wezterm.format({
+		{ Foreground = { Color = bg_color } },
+		{ Text = left_corner },
+		{ Background = { Color = bg_color } },
+		{ Foreground = { Color = icon_color } },
+		{ Text = time_icon },
+		{ Foreground = { Color = active_tab_color } },
+		{ Text = " " .. time },
+		{ Background = { Color = transparent_bg } },
+		{ Foreground = { Color = bg_color } },
+		{ Text = right_corner },
+		{ Text = " " },
+		{ Foreground = { Color = bg_color } },
+		{ Text = left_corner },
+		{ Background = { Color = bg_color } },
+		{ Foreground = { Color = icon_color } },
+		{ Text = workspace_icon },
+		{ Foreground = { Color = active_tab_color } },
+		{ Text = " " .. active_workspace },
+		{ Background = { Color = transparent_bg } },
+		{ Foreground = { Color = bg_color } },
+		{ Text = right_corner },
+		{ Text = " " },
+	})
+end
+wezterm.on("update-right-status", function(window)
+	local active_workspace = window:active_workspace()
+  window:set_right_status(workspace_time_panel(active_workspace))
 end)
 
 -- Function to format tab title
-local function format_tab_title(tab, max_width)
-  local index = tostring(tab.tab_index + 1)
-  local title = tab.tab_title
-  if title and #title > 0 then
-    title = wezterm.truncate_right(title, max_width - 2)
-  else
-    title = wezterm.truncate_right(tab.active_pane.title, max_width - 2)
-  end
+local function format_tab_title(tab)
+	local index = tostring(tab.tab_index + 1)
+	local title = tab.tab_title
+	if title and #title > 0 then
+		title = wezterm.truncate_right(title, max_length_title)
+	else
+		title = wezterm.truncate_right(tab.active_pane.title, max_length_title)
+	end
 
-  local before_tag = ""
-  local after_tag = ""
-  local tab_title = " " .. index .. ": " .. title
+	local tab_index = index .. " "
 
-  if tab.is_active then
-    return {
-      { Background = { Color = transparent_bg } },
-      { Foreground = { Color = active_tab_color } },
-      { Text = before_tag },
-      { Background = { Color = active_tab_color } },
-      { Foreground = { Color = bg_color } },
-      { Text = tab_title },
-      { Background = { Color = transparent_bg } },
-      { Foreground = { Color = active_tab_color } },
-      { Text = after_tag },
-      { Text = " " },
-    }
-  else
-    return {
-      { Background = { Color = transparent_bg } },
-      { Foreground = { Color = bg_color } },
-      { Text = before_tag },
-      { Background = { Color = bg_color } },
-      { Foreground = { Color = active_tab_color } },
-      { Text = tab_title },
-      { Background = { Color = transparent_bg } },
-      { Foreground = { Color = bg_color } },
-      { Text = after_tag },
-      { Text = " " },
-    }
-  end
+	local tab_title = title
+  -- local active_workspace = tab.active_workspace
+
+	if tab.is_active then
+		return {
+			{ Background = { Color = transparent_bg } },
+			{ Foreground = { Color = active_tab_color } },
+			{ Text = left_corner },
+			{ Background = { Color = active_tab_color } },
+			{ Foreground = { Color = bg_color } },
+			{ Text = tab_index },
+			{ Background = { Color = active_tab_background } },
+			{ Foreground = { Color = active_tab_color } },
+			{ Text = " " .. tab_title },
+			{ Background = { Color = transparent_bg } },
+			{ Foreground = { Color = active_tab_background } },
+			{ Text = right_corner },
+			{ Text = " " },
+		}
+	else
+		return {
+			{ Background = { Color = transparent_bg } },
+			{ Foreground = { Color = inactive_tab_color } },
+			{ Text = left_corner },
+			{ Background = { Color = inactive_tab_color } },
+			{ Foreground = { Color = icon_color } },
+			{ Text = tab_index },
+			{ Background = { Color = status_bg_color } },
+			{ Foreground = { Color = inactive_text_color } },
+			{ Text = " " .. tab_title },
+			{ Background = { Color = transparent_bg } },
+			{ Foreground = { Color = status_bg_color } },
+			{ Text = right_corner },
+			{ Text = " " },
+		}
+	end
 end
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-  return format_tab_title(tab, max_width)
+	return format_tab_title(tab)
 end)
 
-config.colors = {
-  tab_bar = { background = transparent_bg },
-}
+-- INFO: KEY configurations:: current set as tmux keybindings
 
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
