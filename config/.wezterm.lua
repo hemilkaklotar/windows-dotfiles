@@ -12,7 +12,7 @@ local function get_dynamic_opacity()
 end
 
 -- Color variables
-local opacity = get_dynamic_opacity()
+local opacity = 1 or get_dynamic_opacity()
 
 -- INFO: Color configuration::
 
@@ -45,7 +45,7 @@ local max_length_title = 10
 
 config.font = wezterm.font_with_fallback({
 	{
-		family = "VictorMono Nerd Font",
+		family = "SpaceMono Nerd Font Mono",
 		weight = "Regular",
 	},
 	{
@@ -55,7 +55,7 @@ config.font = wezterm.font_with_fallback({
 	"Segoe UI Emoji",
 })
 
-config.font_size = 14
+config.font_size = 16
 
 -- INFO: Window settings
 
@@ -229,6 +229,12 @@ config.keys = {
 			flags = "FUZZY|WORKSPACES",
 		}),
 	},
+  -- search for the string "hash" matching regardless of case
+  {
+    key = 'H',
+    mods = 'SHIFT|CTRL',
+    action = act.Search { CaseInSensitiveString = '' },
+  },
 }
 config.mouse_bindings = {
 	-- CMD-click will open the link under the mouse cursor
