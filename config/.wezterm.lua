@@ -3,7 +3,7 @@ local act = wezterm.action
 local config = wezterm.config_builder()
 
 local function get_dynamic_opacity()
-	local hour =os.date("*t").hour
+	local hour = os.date("*t").hour
 	if hour >= 20 or hour < 6 then
 		return 0.25
 	else
@@ -18,7 +18,8 @@ local opacity = 1 or get_dynamic_opacity()
 
 -- 1: Colors
 config.force_reverse_video_cursor = true
-config.color_scheme = "Catppuccin Mocha"
+config.color_scheme = "Rosé Pine (Gogh)"
+-- config.color_scheme = "Catppuccin Mocha"
 local transparent_bg = "#181825"
 local bg_color = "#1e1e2e"
 local active_tab_color = "#cba6f7"
@@ -49,13 +50,13 @@ config.font = wezterm.font_with_fallback({
 		weight = "Regular",
 	},
 	{
-		family = "JetBrainsMono Nerd Font",
+		family = "FiraCode Nerd Font Mono",
 		weight = "Regular",
 	},
 	"Segoe UI Emoji",
 })
 
-config.font_size = 16
+config.font_size = 12
 
 -- INFO: Window settings
 
@@ -72,7 +73,12 @@ config.cursor_blink_rate = 250
 
 -- Shell
 config.default_prog = { "pwsh", "-NoLogo" }
-
+config.launch_menu = {
+	{
+		label = "Git Bash",
+		args = { "C:\\Program Files\\Git\\bin\\bash.exe", "-i", "-l" },
+	},
+}
 
 local function workspace_time_panel(active_workspace)
 	local time = wezterm.strftime("%I:%M %p")
@@ -105,7 +111,7 @@ local function workspace_time_panel(active_workspace)
 end
 wezterm.on("update-right-status", function(window)
 	local active_workspace = window:active_workspace()
-  window:set_right_status(workspace_time_panel(active_workspace))
+	window:set_right_status(workspace_time_panel(active_workspace))
 end)
 
 -- Function to format tab title
@@ -121,7 +127,7 @@ local function format_tab_title(tab)
 	local tab_index = index .. " "
 
 	local tab_title = title
-  -- local active_workspace = tab.active_workspace
+	-- local active_workspace = tab.active_workspace
 
 	if tab.is_active then
 		return {
@@ -229,12 +235,12 @@ config.keys = {
 			flags = "FUZZY|WORKSPACES",
 		}),
 	},
-  -- search for the string "hash" matching regardless of case
-  {
-    key = 'H',
-    mods = 'SHIFT|CTRL',
-    action = act.Search { CaseInSensitiveString = '' },
-  },
+	-- search for the string "hash" matching regardless of case
+	{
+		key = "H",
+		mods = "SHIFT|CTRL",
+		action = act.Search({ CaseInSensitiveString = "" }),
+	},
 }
 config.mouse_bindings = {
 	-- CMD-click will open the link under the mouse cursor
