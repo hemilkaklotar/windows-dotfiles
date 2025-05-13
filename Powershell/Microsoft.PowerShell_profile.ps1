@@ -38,3 +38,8 @@ Set-Alias cact Activate-CondaEnv
 Set-Alias cdact DeActivate-CondaEnv
 # Import the Microsoft WinGet CommandNotFound module
 Import-Module -Name Microsoft.WinGet.CommandNotFound
+
+#f45873b3-b655-43a6-b217-97c00aa0db58 PowerToys CommandNotFound module
+
+Import-Module -Name Microsoft.WinGet.CommandNotFound
+#f45873b3-b655-43a6-b217-97c00aa0db58

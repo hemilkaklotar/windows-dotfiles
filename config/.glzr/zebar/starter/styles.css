@@ -1,0 +1,251 @@
+/**
+ * Import the Nerdfonts icon font and Google Fonts.
+ * Ref https://www.nerdfonts.com/cheat-sheet for a cheatsheet of available Nerdfonts icons.
+ */
+@import 'https://www.nerdfonts.com/assets/css/webfont.css';
+@import 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Material+Symbols+Rounded&display=swap';
+
+:root {
+  /* Material Design color palette - Dark theme */
+  --md-primary: #bb86fc;
+  --md-primary-variant: #3700b3;
+  --md-secondary: #03dac6;
+  --md-background: #12121280;
+  --md-surface: #12121280;
+  --md-error: #cf6679;
+  --md-on-primary: #000000;
+  --md-on-secondary: #000000;
+  --md-on-background: #ffffff;
+  --md-on-surface: #ffffff;
+  --md-on-error: #000000;
+  --md-elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --md-elevation-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  
+  /* Custom variables */
+  --md-surface-1: rgba(255, 255, 255, 0.05);
+  --md-surface-2: rgba(255, 255, 255, 0.08);
+  --md-surface-3: rgba(255, 255, 255, 0.11);
+  --md-icon: rgba(255, 255, 255, 0.7);
+  --md-danger: #cf6679;
+  --md-radius: 4px;
+}
+
+[data-theme="light"] {
+  /* Material Design color palette - Light theme */
+  --md-primary: #6200ee;
+  --md-primary-variant: #3700b3;
+  --md-secondary: #03dac6;
+  --md-background: #fafafacc;
+  --md-surface: #ffffff;
+  --md-error: #b00020;
+  --md-on-primary: #ffffff;
+  --md-on-secondary: #000000;
+  --md-on-background: #000000;
+  --md-on-surface: #000000;
+  --md-on-error: #ffffff;
+  --md-elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --md-elevation-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  
+  /* Custom variables */
+  --md-surface-1: rgba(0, 0, 0, 0.05);
+  --md-surface-2: rgba(0, 0, 0, 0.08);
+  --md-surface-3: rgba(0, 0, 0, 0.11);
+  --md-icon: rgba(0, 0, 0, 0.6);
+  --md-danger: #b00020;
+}
+
+i {
+  color: var(--md-icon);
+  margin-right: 5px;
+}
+
+body {
+  color: var(--md-on-background);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  overflow: hidden;
+  margin: 0;
+}
+
+div, span, p {
+  cursor: default;
+  user-select: none;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+#root {
+  background-color: var(--md-background);
+  transition: all 0.2s ease;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  height: 100%;
+  padding: 2px 10px;
+}
+
+.left, .center, .right {
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  justify-self: center;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.right {
+  justify-self: end;
+}
+
+.logo, .binding-mode, .tiling-direction, .paused-button, .network, .memory, .cpu, .battery, .weather, .theme-toggle {
+  margin-right: 8px;
+}
+
+.workspaces {
+  display: flex;
+  align-items: center;
+}
+
+.workspace {
+  background: var(--md-surface-1);
+  margin-right: 3px;
+  padding: 3px 6px;
+  color: var(--md-on-background);
+  border: none;
+  border-radius: var(--md-radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+  box-shadow: var(--md-elevation-1);
+
+  &.displayed {
+    background: var(--md-surface-2);
+  }
+
+  &.focused, &:hover {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+  }
+}
+
+.binding-mode, .tiling-direction, .paused-button, .theme-toggle {
+  background: var(--md-surface-2);
+  color: var(--md-on-background);
+  border-radius: var(--md-radius);
+  line-height: 1;
+  padding: 3px 6px;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--md-elevation-1);
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.binding-mode:hover, .tiling-direction:hover, .paused-button:hover, .theme-toggle:hover {
+  background: var(--md-surface-3);
+  box-shadow: var(--md-elevation-2);
+}
+
+.binding-mode {
+  margin-right: 3px;
+}
+
+.theme-toggle {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cpu .high-usage {
+  color: var(--md-error);
+}
+
+.battery {
+  position: relative;
+}
+
+.battery .charging-icon {
+  position: absolute;
+  font-size: 7px;
+  left: -8px;
+  top: 3px;
+}
+
+.network, .memory, .cpu, .battery, .weather {
+  display: flex;
+  align-items: center;
+  padding: 3px 6px;
+  background: var(--md-surface-1);
+  border-radius: var(--md-radius);
+  box-shadow: var(--md-elevation-1);
+  font-weight: 400;
+  letter-spacing: 0.25px;
+}
+
+/* Ripple effect for buttons */
+.workspace, .binding-mode, .tiling-direction, .paused-button, .theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.workspace::after, .binding-mode::after, .tiling-direction::after, .paused-button::after, .theme-toggle::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--md-primary) 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform .3s, opacity .5s;
+}
+
+.workspace:active::after, .binding-mode:active::after, .tiling-direction:active::after, .paused-button:active::after, .theme-toggle:active::after {
+  transform: scale(0, 0);
+  opacity: 0.3;
+  transition: 0s;
+}
+
+.window-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  font-size: 11px;
+}
+
+.window-title {
+  color: var(--md-on-background);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+.window-class {
+  color: var(--md-icon);
+  margin-right: 8px;
+  transition: color 0.2s ease;
+}
+
+.logo:hover {
+  color: var(--md-primary);
+}
