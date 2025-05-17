@@ -56,19 +56,19 @@ local charging_icons = {
 ---@type table<string, Cells.SegmentColors>
 -- stylua: ignore
 local colors = {
-   date      = { fg = '#fab387', bg = 'rgba(0, 0, 0, 0.4)' },
-   battery   = { fg = '#f9e2af', bg = 'rgba(0, 0, 0, 0.4)' },
-   separator = { fg = '#74c7ec', bg = 'rgba(0, 0, 0, 0.4)' }
+   date      = { fg = '#fab387', bg = 'rgba(0, 0, 0, 0)' },
+   battery   = { fg = '#f9e2af', bg = 'rgba(0, 0, 0, 0)' },
+   separator = { fg = '#74c7ec', bg = 'rgba(0, 0, 0, 0)' }
 }
 
 local cells = Cells:new()
 
 cells
-   :add_segment('date_icon', ICON_DATE .. '  ', colors.date, attr(attr.intensity('Bold')))
-   :add_segment('date_text', '', colors.date, attr(attr.intensity('Bold')))
+   :add_segment('date_icon', ICON_DATE .. '  ', colors.date, attr())
+   :add_segment('date_text', '', colors.date, attr())
    :add_segment('separator', ' ' .. ICON_SEPARATOR .. '  ', colors.separator)
    :add_segment('battery_icon', '', colors.battery)
-   :add_segment('battery_text', '', colors.battery, attr(attr.intensity('Bold')))
+   :add_segment('battery_text', '', colors.battery, attr())
 
 ---@return string, string
 local function battery_info()

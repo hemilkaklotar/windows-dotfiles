@@ -24,7 +24,7 @@ local mocha = {
    surface2  = '#585b70',
    surface1  = '#45475a',
    surface0  = '#313244',
-   base      = '#1f1f28',
+   base      = '#000000',
    mantle    = '#181825',
    crust     = '#11111b',
 }
@@ -58,7 +58,7 @@ local colorscheme = {
       '#F2F2F2', -- white
    },
    tab_bar = {
-      background = 'rgba(0, 0, 0, 0.4)',
+      background = 'rgba(0, 0, 0, 0)',
       active_tab = {
          bg_color = mocha.surface2,
          fg_color = mocha.text,
@@ -90,5 +90,4 @@ local colorscheme = {
    split = mocha.overlay0,
    compose_cursor = mocha.flamingo,
 }
-
 return colorscheme

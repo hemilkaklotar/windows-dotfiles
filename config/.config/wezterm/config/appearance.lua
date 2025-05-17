@@ -5,8 +5,9 @@ local colors = require('colors.custom')
 return {
    max_fps = 120,
    front_end = 'WebGpu',
-   webgpu_power_preference = 'HighPerformance',
-   webgpu_preferred_adapter = gpu_adapters:pick_best(),
+   webgpu_power_preference = 'LowPower',
+   -- webgpu_power_preference = 'HighPerformance',
+   -- webgpu_preferred_adapter = gpu_adapters:pick_best(),
    -- webgpu_preferred_adapter = gpu_adapters:pick_manual('Dx12', 'IntegratedGpu'),
    -- webgpu_preferred_adapter = gpu_adapters:pick_manual('Gl', 'Other'),
    underline_thickness = '1.5pt',
@@ -19,10 +20,10 @@ return {
    cursor_blink_rate = 650,
 
    -- color scheme
-   colors = colors,
-
+   -- colors = colors,
+   color_scheme = 'CGA',
    -- background
-   background = backdrops:initial_options(false), -- set to true if you want wezterm to start on focus mode
+   -- background = backdrops:initial_options(false), -- set to true if you want wezterm to start on focus mode
 
    -- scrollbar
    enable_scroll_bar = true,
@@ -44,7 +45,7 @@ return {
    },
    adjust_window_size_when_changing_font_size = false,
    window_close_confirmation = 'NeverPrompt',
-   window_decorations = "RESIZE",
+   window_decorations = 'RESIZE',
    window_frame = {
       active_titlebar_bg = '#090909',
       -- font = fonts.font,
@@ -66,4 +67,6 @@ return {
       fade_out_duration_ms = 250,
       target = 'CursorColor',
    },
+   window_background_opacity = 0.5,
+   win32_system_backdrop = 'Acrylic',
 }
