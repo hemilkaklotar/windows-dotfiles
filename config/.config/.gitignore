@@ -1,4 +1,8 @@
-/git
-/jgit
-/configstore
-/scoop
+*
+
+# ignore all files except the following directories
+!.gitignore
+!nvim-vscode
+!wezterm
+!nvim-vscode/**
+!wezterm/**
