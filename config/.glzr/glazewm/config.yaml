@@ -36,7 +36,7 @@ gaps:
 
   # Gap between windows and the screen edge.
   outer_gap:
-    top: "0px"
+    top: "10px"
     right: "10px"
     bottom: "10px"
     left: "10px"
@@ -47,18 +47,18 @@ window_effects:
     # Highlight the window with a colored border.
     # ** Exclusive to Windows 11 due to API limitations.
     border:
-      enabled: false
+      enabled: true
       color: "#CBA6F7"
 
     # Remove the title bar from the window's frame. Note that this can
     # cause rendering issues for some applications.
     hide_title_bar:
-      enabled: false
+      enabled: true
 
     # Change the corner style of the window's frame.
     # ** Exclusive to Windows 11 due to API limitations.
     corner_style:
-      enabled: false
+      enabled: true
       # Allowed values: 'square', 'rounded', 'small_rounded'.
       style: "square"
 
@@ -68,7 +68,7 @@ window_effects:
       enabled: true
       color: "#000000"
     hide_title_bar:
-      enabled: false
+      enabled: true
     corner_style:
       enabled: true
       style: "square"
@@ -95,7 +95,7 @@ window_behavior:
       maximized: true
 
       # Whether to show fullscreen windows as always on top.
-      shown_on_top: true
+      shown_on_top: false
 
 workspaces:
   - name: "1"
